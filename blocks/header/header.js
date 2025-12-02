@@ -2,7 +2,7 @@ import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
 // media query match that indicates mobile/tablet width
-const isDesktop = window.matchMedia('(min-width: 900px)');
+const isDesktop = window.matchMedia('(min-width: 1010px)');
 
 function closeOnEscape(e) {
   if (e.code === 'Escape') {
@@ -79,24 +79,41 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
   }
   // enable menu collapse on escape keypress
   if (!expanded || isDesktop.matches) {
-    // collapse menu on escape press
     window.addEventListener('keydown', closeOnEscape);
   } else {
     window.removeEventListener('keydown', closeOnEscape);
   }
 }
 
+const THEME_KEY = 'theme-preference';
+
+function getTheme() {
+  const stored = localStorage.getItem(THEME_KEY);
+  return (stored === 'light' || stored === 'dark') ? stored : 'dark';
+}
+
+function setTheme(theme) {
+  const safe = (theme === 'light' || theme === 'dark') ? theme : 'dark';
+  document.documentElement.setAttribute('data-theme', safe);
+  localStorage.setItem(THEME_KEY, safe);
+}
+
+(function initThemeEarly() {
+  setTheme(getTheme());
+}());
+
 /**
- * decorates the header, mainly the nav
+ * loads and decorates the header, mainly the nav
  * @param {Element} block The header block element
  */
 export default async function decorate(block) {
   // load nav as fragment
   const navMeta = getMetadata('nav');
-  const navPath = navMeta ? new URL(navMeta).pathname : '/nav';
+  const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/nav';
   const fragment = await loadFragment(navPath);
 
   // decorate nav DOM
+  block.textContent = '';
   const nav = document.createElement('nav');
   nav.id = 'nav';
   while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
@@ -128,7 +145,52 @@ export default async function decorate(block) {
     });
   }
 
-  // hamburger for mobile
+  const navTools = nav.querySelector('.nav-tools');
+  if (navTools) {
+    const currentLanguage = getMetadata('lang');
+    const url = window.location.href;
+
+    const langSelect = document.createElement('select');
+    langSelect.classList.add('language-select');
+
+    navTools.querySelectorAll('li').forEach((li) => {
+      const langCode = li.textContent.trim();
+      const option = document.createElement('option');
+      option.value = url.replace(`/${currentLanguage}/`, `/${langCode}/`);
+      option.textContent = langCode;
+      if (langCode === currentLanguage) option.selected = true;
+      langSelect.appendChild(option);
+    });
+
+    langSelect.addEventListener('change', (event) => {
+      window.location.href = event.target.value;
+    });
+
+    const themeSelect = document.createElement('select');
+    themeSelect.classList.add('theme-select');
+    themeSelect.setAttribute('aria-label', 'Theme'); // no visible label in navbar
+
+    [
+      { value: 'dark', label: '⚫ Dark theme' },
+      { value: 'light', label: '⚪ Light theme' },
+    ].forEach(({ value, label }) => {
+      const o = document.createElement('option');
+      o.value = value;
+      o.textContent = label; // shows in the dropdown list
+      if (value === getTheme()) o.selected = true;
+      themeSelect.appendChild(o);
+    });
+
+    themeSelect.addEventListener('change', (e) => setTheme(e.target.value));
+
+    navTools.innerHTML = '';
+    const toolsWrapper = document.createElement('div');
+    toolsWrapper.style.display = 'flex';
+    toolsWrapper.style.gap = '12px';
+    toolsWrapper.append(langSelect, themeSelect);
+    navTools.appendChild(toolsWrapper);
+  }
+
   const hamburger = document.createElement('div');
   hamburger.classList.add('nav-hamburger');
   hamburger.innerHTML = `<button type="button" aria-controls="nav" aria-label="Open navigation">
@@ -137,7 +199,6 @@ export default async function decorate(block) {
   hamburger.addEventListener('click', () => toggleMenu(nav, navSections));
   nav.prepend(hamburger);
   nav.setAttribute('aria-expanded', 'false');
-  // prevent mobile nav behavior on window resize
   toggleMenu(nav, navSections, isDesktop.matches);
   isDesktop.addEventListener('change', () => toggleMenu(nav, navSections, isDesktop.matches));
 
