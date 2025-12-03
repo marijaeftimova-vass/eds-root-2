@@ -102,7 +102,7 @@
 }
 
 .icon-cards.grid > div {
-    padding: var(--spacing-xlarge);
+    padding: var(--spacing-small);
     border-radius: 16px;
     background: var(--swiss-light-red);
     box-shadow: 0 4px 16px rgb(0 0 0 / 0.08);

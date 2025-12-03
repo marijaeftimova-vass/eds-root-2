@@ -9,45 +9,90 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-
- :root {
-  --link-color: #035fe6;
-  --link-hover-color: #136ff6;
-  --background-color: #fff;
-  --overlay-background-color: #eee;
-  --highlight-background-color: #ccc;
-  --text-color: #000;
-  --body-font-family: roboto, roboto-fallback;
+:root {
+  color-scheme: dark;
+  --swiss-red: #D52B1E;
+  --coral-tint: #FFE5E0;
+  --pure-white: #FFF;
+  --light-gray: #F4F4F4;
+  --mid-gray: #CCC;
+  --charcoal-gray: #0b0b0b;
+  --forest-green: #2D7A4C;
+  --mint-green: #E5F7EC;
+  --link-color: var(--swiss-red);
+  --link-hover-color: color-mix(in srgb, var(--swiss-red) 70%, transparent);
+  --background-color: #0b0b0b;
+  --light-color: var(--light-gray);
+  --dark-color: var(--mid-gray);
+  --text-color: var(--pure-white);
+  --body-font-family: 'Inter', sans-serif;
   --heading-font-family: var(--body-font-family);
   --fixed-font-family: 'Roboto Mono', menlo, consolas, 'Liberation Mono', monospace;
-  --body-font-size-m: 22px;
-  --body-font-size-s: 18px;
-  --body-font-size-xs: 16px;
+  --ff-pricefx-icons: 'pricefx-icons', sans-serif;
+  --body-font-size-m: 16px;
+  --body-font-size-s: 14px;
+  --body-font-size-xs: 12px;
   --heading-font-size-xxl: 48px;
   --heading-font-size-xl: 40px;
   --heading-font-size-l: 32px;
   --heading-font-size-m: 24px;
   --heading-font-size-s: 20px;
-  --heading-font-size-xs: 18px;
-  --nav-height: 64px;
+  --heading-font-size-xs: 16px;
+  --heading-font-size-xxs: 14px;
+  --spacing-micro: 4px;
+  --spacing-xxsmall: 8px;
+  --spacing-xsmall: 16px;
+  --spacing-small: 24px;
+  --spacing-medium: 32px;
+  --spacing-large: 48px;
+  --spacing-xlarge: 64px;
+  --spacing-xxlarge: 96px;
+  --spacing-jumbo: 128px;
+  --nav-height: 80px;
+  --nav-width: 1000px;
+  --nav-bg-color: rgb(255 255 255 / 90%);
+  --accent-color: #F49372;
+  --text-light-color: var(--light-gray);
+  --darkest-color: #5C5249;
+  --box-shadow: rgb(50 50 93 / 25%) 0px 2px 5px -1px, rgb(0 0 0 / 30%) 0px 1px 3px -1px;
+  --border-radius: 20px;
+  --icon-plus: "\e917";
+  --icon-minus: "\e915";
 }
 
-@font-face {
-  font-family: roboto-fallback;
-  size-adjust: 100.06%;
-  ascent-override: 95%;
-  src: local('Arial');
+:root[data-theme="light"] {
+  color-scheme: light;
+  --background-color: #fff;
+  --text-color: #0b0b0b;
+  --link-color: var(--swiss-red);
+  --link-hover-color: color-mix(in srgb, var(--swiss-red) 70%, transparent);
+  --light-color: #f4f4f4;
+  --dark-color: #e6e6e6;
+  --nav-bg-color: rgba(237 237 237 / 90%);
 }
 
-@media (min-width: 900px) {
-  :root {
-    --heading-font-size-xxl: 60px;
-    --heading-font-size-xl: 48px;
-    --heading-font-size-l: 36px;
-    --heading-font-size-m: 30px;
-    --heading-font-size-s: 24px;
-    --heading-font-size-xs: 22px;
-  }
+.space-y-1 > :not(:last-child) {
+  --space-y-reverse: 0;
+  --use-number: 1;
+  margin-block: calc(calc(var(--spacing-xxsmall) * var(--use-number)) * var(--space-y-reverse)) calc(calc(var(--spacing-xxsmall) * var(--use-number)) * calc(1 - var(--space-y-reverse)));
+}
+
+.space-y-2 > :not(:last-child) {
+  --space-y-reverse: 0;
+  --use-number: 2;
+  margin-block: calc(calc(var(--spacing-xxsmall) * var(--use-number)) * var(--space-y-reverse)) calc(calc(var(--spacing-xxsmall) * var(--use-number)) * calc(1 - var(--space-y-reverse)));
+}
+
+.space-y-3 > :not(:last-child) {
+  --space-y-reverse: 0;
+  --use-number: 3;
+  margin-block: calc(calc(var(--spacing-xxsmall) * var(--use-number)) * var(--space-y-reverse)) calc(calc(var(--spacing-xxsmall) * var(--use-number)) * calc(1 - var(--space-y-reverse)));
+}
+
+.space-y-4 > :not(:last-child) {
+  --space-y-reverse: 0;
+  --use-number: 4;
+  margin-block: calc(calc(var(--spacing-xxsmall) * var(--use-number)) * var(--space-y-reverse)) calc(calc(var(--spacing-xxsmall) * var(--use-number)) * calc(1 - var(--space-y-reverse)));
 }
 
 body {
@@ -68,8 +113,7 @@ header {
   height: var(--nav-height);
 }
 
-h1, h2, h3,
-h4, h5, h6 {
+h1, h2, h3, h4, h5, h6 {
   font-family: var(--heading-font-family);
   font-weight: 600;
   line-height: 1.25;
@@ -78,31 +122,24 @@ h4, h5, h6 {
   scroll-margin: calc(var(--nav-height) + 1em);
 }
 
-h1 { font-size: var(--heading-font-size-xxl) }
-h2 { font-size: var(--heading-font-size-xl) }
-h3 { font-size: var(--heading-font-size-l) }
-h4 { font-size: var(--heading-font-size-m) }
-h5 { font-size: var(--heading-font-size-s) }
-h6 { font-size: var(--heading-font-size-xs) }
+h1 { font-size: var(--heading-font-size-l); }
+h2 { font-size: var(--heading-font-size-m); }
+h3 { font-size: var(--heading-font-size-s); }
+h4 { font-size: var(--heading-font-size-xs); }
+h5 { font-size: var(--heading-font-size-xxs); }
+h6 { font-size: var(--heading-font-size-xxs); }
 
 p, dl, ol, ul, pre, blockquote {
   margin-top: 1em;
   margin-bottom: 1em;
 }
 
-hr {
-  margin-top: 1.5em;
-  margin-bottom: 1.5em;
-  border: 0;
-  border-bottom: 1px solid var(--overlay-background-color);
-}
-
-code, pre, samp {
+code, pre {
   font-family: var(--fixed-font-family);
   font-size: var(--body-font-size-s);
 }
 
-code, samp {
+code {
   padding: .125em;
 }
 
@@ -111,11 +148,19 @@ pre {
 }
 
 main pre {
-  background-color: var(--overlay-background-color);
+  background-color: var(--light-color);
   padding: 1em;
   border-radius: .25em;
   overflow-x: auto;
   white-space: pre;
+}
+
+main {
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 a:any-link {
@@ -136,67 +181,30 @@ a.button:any-link, button {
   border: 2px solid transparent;
   padding: 5px 30px;
   text-align: center;
-  font-style: normal;
   font-weight: 600;
   cursor: pointer;
-  color: var(--background-color);
+  color: var(--pure-white);
   background-color: var(--link-color);
   margin: 16px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  border-radius: 30px;
+  border-radius: var(--border-radius);
 }
 
-a.button:hover, a.button:focus, button:hover, button:focus  {
+a.button:hover, a.button:focus, button:hover, button:focus {
   background-color: var(--link-hover-color);
-  cursor: pointer;
 }
 
 button:disabled, button:disabled:hover {
-  background-color: var(--overlay-background-color);
+  background-color: var(--light-color);
   cursor: unset;
 }
 
 a.button.secondary, button.secondary {
   background-color: unset;
-  border: 2px solid currentcolor;
-  color: var(--text-color)
-}
-
-main input {
-  font-size: 1.25rem;
-  width: 100%;
-  max-width: 50rem;
-  display: block;
-  margin-bottom: 1rem;
-  padding: 0.75rem 0.6rem;
-  border-radius: 0.25rem;
-  box-sizing: border-box;
-  border: 1px solid var(--text-color);
+  border: 2px solid var(--mid-gray);
   color: var(--text-color);
-  background-color: var(--background-color);
-}
-
-main input:hover {
-  border: 1px solid var(--text-color);
-}
-
-main blockquote {
-  font-style: italic;
-  margin: 3rem;
-  text-indent: -1rem;
-  hanging-punctuation: first;
-}
-
-main blockquote p::before {
-  content: "“";
-  line-height: 0;
-}
-
-main blockquote p::after {
-  content: "”";
-  line-height: 0;
 }
 
 main img {
@@ -220,21 +228,79 @@ main .section {
   padding: 64px 16px;
 }
 
-@media (min-width: 600px) {
+@media (width >= 600px) {
+  h1 { font-size: var(--heading-font-size-xxl); }
+  h2 { font-size: var(--heading-font-size-xl); }
+  h3 { font-size: var(--heading-font-size-l); }
+  h4 { font-size: var(--heading-font-size-m); }
+  h5 { font-size: var(--heading-font-size-s); }
+  h6 { font-size: var(--heading-font-size-xs); }
+
   main .section {
     padding: 64px 32px;
   }
 }
 
-@media (min-width: 900px) {
+@media (width >= 900px) {
+  h1 { font-size: var(--heading-font-size-xxl); }
+  h2 { font-size: var(--heading-font-size-xl); }
+  h3 { font-size: var(--heading-font-size-l); }
+  h4 { font-size: var(--heading-font-size-m); }
+  h5 { font-size: var(--heading-font-size-s); }
+  h6 { font-size: var(--heading-font-size-xs); }
+
   .section > div {
     max-width: 1200px;
     margin: auto;
   }
 }
 
+main .section.light,
 main .section.highlight {
-  background-color: var(--highlight-background-color);
+  background-color: var(--light-color);
+}
+
+main .section.dark {
+  color: var(--pure-white);
+  background-color: var(--dark-color);
+}
+
+main .section.dark a.button:any-link,
+main .section.dark button {
+  background-color: var(--link-hover-color);
+}
+
+main .section.dark a.button:hover,
+main .section.dark button:hover {
+  background-color: var(--accent-color);
+}
+
+main .section.centered .default-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+body.blog main {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+body.interview h3 {
+  background-color: var(--accent-color);
+}
+
+body.interview strong::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  display: inline-block;
+  margin-right: 10px;
+  position: relative;
+  top: 4px;
 }
 
 :root[data-theme="light"] {
